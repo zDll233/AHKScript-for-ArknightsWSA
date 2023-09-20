@@ -43,7 +43,7 @@ DllCall("SetWinEventHook"
     , "UInt",   EVENT_SYSTEM_MOVESIZEEND                        ;_In_  UINT eventMax
     , "Ptr" ,   0x0                                             ;_In_  HMODULE hmodWinEventProc
     , "Ptr" ,   CallbackCreate(WinEventProc)                    ;_In_  WINEVENTPROC lpfnWinEventProc
-    , "UInt",   Arknights_PID                                 ;_In_  DWORD idProcess
+    , "UInt",   Arknights_PID                                   ;_In_  DWORD idProcess
     , "UInt",   0x0                                             ;_In_  DWORD idThread
     , "UInt",   WINEVENT_OUTOFCONTEXT|WINEVENT_SKIPOWNPROCESS)  ;_In_  UINT dwflags
 
