@@ -28,6 +28,6 @@
 
 ---
 
-根据所需长宽比不同，热键设置偏好不同，更改ArknightsWSAScript.ahk。脚本失效的话需要重新加载，右击任务栏图标选择Reload Script。
+根据所需长宽比不同，热键设置偏好不同，更改ArknightsWSAScript.ahk。脚本修改后需要重新加载，右击脚本任务栏图标选择Reload Script。
 
 WSA下游戏表现其实还不如模拟器，卡顿掉帧很频繁，但是也凑合能用了。
