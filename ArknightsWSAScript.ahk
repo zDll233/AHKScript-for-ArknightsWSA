@@ -3,11 +3,20 @@
 #include "Audio.ahk"
 
 ;Arknights Hotkeys
+
 Arknights_PID:=0
 Arknights_Title:="明日方舟"
-^1::Run "C:\Users\35573\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\明日方舟.lnk"
+Arknights_Class:="ahk_class com.hypergryph.arknights"
+^1::Run "C:\Users\35573\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\明日方舟.lnk",,,&Arknights_PID
 
-#HotIf WinActive("ahk_class com.hypergryph.arknights")
+#HotIf WinExist(Arknights_Class)
+if WinExist(Arknights_Class) && !Arknights_PID
+{
+    Arknights_PID:=WinGetPID(Arknights_Class)
+    sav := SimpleAudioVolumeFromPid(Arknights_PID)
+}
+
+#HotIf WinActive(Arknights_Class)
 ;resolution,Proportion,etc
 ratio1:=1920/1040
 
@@ -31,13 +40,6 @@ Space::SetClick(PauseBtn_wRatio1,PauseBtn_hRatio1)
 XButton2::SetClick(AbortBtn_wRatio1,AbortBtn_hRatio1)
 f::SetClick(AbortBtn_wRatio1,AbortBtn_hRatio1)
 
-;Arknights Audio Control
-if WinWait("ahk_class com.hypergryph.arknights")
-{
-    global Arkginghts_PID,sav
-    Arkginghts_PID:=WinGetPID("ahk_class com.hypergryph.arknights")
-    sav := SimpleAudioVolumeFromPid(Arkginghts_PID)
-}
 ^+NumpadAdd::sav.SetMasterVolume(min(sav.GetMasterVolume()+0.1,1))
 ^+NumpadSub::sav.SetMasterVolume(max(sav.GetMasterVolume()-0.1,0))
 ^+m::sav.SetMute(!sav.GetMute())
