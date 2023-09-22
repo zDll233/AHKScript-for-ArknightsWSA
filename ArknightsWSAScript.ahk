@@ -5,7 +5,7 @@
 ;Arknights Hotkeys
 Arknights_PID:=0
 Arknights_Title:="明日方舟"
-^1::Run "C:\Users\35573\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\明日方舟.lnk",,,&Arkginghts_PID
+^1::Run "C:\Users\35573\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\明日方舟.lnk"
 
 #HotIf WinActive("ahk_class com.hypergryph.arknights")
 ;resolution,Proportion,etc
