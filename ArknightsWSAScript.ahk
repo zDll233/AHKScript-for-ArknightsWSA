@@ -10,8 +10,11 @@ Arknights_Class:="ahk_class com.hypergryph.arknights"
 ^1::Run "C:\Users\35573\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\明日方舟.lnk",,,&Arknights_PID
 
 #HotIf WinExist(Arknights_Class)
-Arknights_PID:=WinGetPID(Arknights_Class)
-sav := SimpleAudioVolumeFromPid(Arknights_PID)
+if WinExist(Arknights_Class)
+{
+    Arknights_PID:=WinGetPID(Arknights_Class)
+    sav := SimpleAudioVolumeFromPid(Arknights_PID)
+}
 
 #HotIf WinActive(Arknights_Class)
 ;resolution,Proportion,etc
