@@ -26,15 +26,13 @@ EVENT_SYSTEM_MOVESIZESTART := 0x000A
 EVENT_OBJECT_CREATE := 0x00008000
 
 
-Init()
-{
+Init(){
     global Arknights_PID,Arknights_Title,sav
     Arknights_PID:=WinGetPID(Arknights_Title)
     sav := SimpleAudioVolumeFromPid(Arknights_PID)
 }
 
-SetClick(wRatio,hRatio)
-{
+SetClick(wRatio,hRatio){
     WinGetClientPos ,, &Width, &Height, Arknights_Title
 
     SetControlDelay -1
@@ -42,8 +40,7 @@ SetClick(wRatio,hRatio)
     KeyWait A_ThisHotkey    ; avoid hotkeys being triggered repeatedly
 }
 
-Resize(WinTitle,whRatio)
-{
+Resize(WinTitle,whRatio){
     WinGetClientPos &old_X, &old_Y, &old_Width, &old_Height, WinTitle
     WinMove ,,old_Height*whRatio,,WinTitle
 }
@@ -63,16 +60,14 @@ class WinEventHook
 
 creationHook := WinEventHook(EVENT_OBJECT_CREATE, EVENT_OBJECT_CREATE, CreationProc, "F")
 CreationProc(hWinEventHook, event, hwnd, idObject, idChild, dwEventThread, dwmsEventTime) {
-    if WinGetTitle(hwnd) = Arknights_Title
-    {      
+    if WinGetTitle(hwnd) = Arknights_Title{      
         sleep 1000
         Init()
     }
 }
 
 resizeHook:=WinEventHook(EVENT_SYSTEM_MOVESIZESTART, EVENT_SYSTEM_MOVESIZEEND, ResizeProc, "F",Arknights_PID)
-ResizeProc(hWinEventHook, event, hwnd, idObject, idChild, dwEventThread, dwmsEventTime) 
-{
+ResizeProc(hWinEventHook, event, hwnd, idObject, idChild, dwEventThread, dwmsEventTime) {
     winTitle:=WinGetTitle(hwnd)   
     if(winTitle=Arknights_Title && event=EVENT_SYSTEM_MOVESIZEEND) 
         Resize(winTitle,ratio1)
