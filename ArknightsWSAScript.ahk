@@ -1,22 +1,13 @@
+;Arknights Hotkeys
 #Requires AutoHotkey v2.0
 ;Audio Control
 #include "Audio.ahk"
 
-;Arknights Hotkeys
+Persistent
 
 Arknights_PID:=0
 Arknights_Title:="明日方舟"
-Arknights_Class:="ahk_class com.hypergryph.arknights"
-^1::Run "C:\Users\35573\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\明日方舟.lnk",,,&Arknights_PID
 
-#HotIf WinExist(Arknights_Class)
-if WinExist(Arknights_Class)
-{
-    Arknights_PID:=WinGetPID(Arknights_Class)
-    sav := SimpleAudioVolumeFromPid(Arknights_PID)
-}
-
-#HotIf WinActive(Arknights_Class)
 ;resolution,Proportion,etc
 ratio1:=1920/1040
 
@@ -32,34 +23,14 @@ AbortBtn_hRatio1:=0.34
 ;Event constant
 EVENT_SYSTEM_MOVESIZEEND := 0x000B
 EVENT_SYSTEM_MOVESIZESTART := 0x000A
-WINEVENT_OUTOFCONTEXT := 0x0
-WINEVENT_SKIPOWNPROCESS := 0x2
+EVENT_OBJECT_CREATE := 0x00008000
 
-RBUTTON::SetClick(SkillBtn_wRatio1,SkillBtn_hRatio1)
-Space::SetClick(PauseBtn_wRatio1,PauseBtn_hRatio1)
-XButton2::SetClick(AbortBtn_wRatio1,AbortBtn_hRatio1)
-f::SetClick(AbortBtn_wRatio1,AbortBtn_hRatio1)
 
-^+NumpadAdd::sav.SetMasterVolume(min(sav.GetMasterVolume()+0.1,1))
-^+NumpadSub::sav.SetMasterVolume(max(sav.GetMasterVolume()-0.1,0))
-^+m::sav.SetMute(!sav.GetMute())
-
-DllCall("SetWinEventHook"
-    , "UInt",   EVENT_SYSTEM_MOVESIZESTART                      ;_In_  UINT eventMin
-    , "UInt",   EVENT_SYSTEM_MOVESIZEEND                        ;_In_  UINT eventMax
-    , "Ptr" ,   0x0                                             ;_In_  HMODULE hmodWinEventProc
-    , "Ptr" ,   CallbackCreate(WinEventProc)                    ;_In_  WINEVENTPROC lpfnWinEventProc
-    , "UInt",   Arknights_PID                                   ;_In_  DWORD idProcess
-    , "UInt",   0x0                                             ;_In_  DWORD idThread
-    , "UInt",   WINEVENT_OUTOFCONTEXT|WINEVENT_SKIPOWNPROCESS)  ;_In_  UINT dwflags
-
-WinEventProc(hWinEventHook, event, hwnd, idObject, idChild, dwEventThread, dwmsEventTime) 
+Init()
 {
-    winTitle:=WinGetTitle("ahk_id " hwnd)   
-    if(winTitle=Arknights_Title && event=EVENT_SYSTEM_MOVESIZEEND) 
-    {
-        Resize(winTitle,ratio1)
-    }
+    global Arknights_PID,Arknights_Title,sav
+    Arknights_PID:=WinGetPID(Arknights_Title)
+    sav := SimpleAudioVolumeFromPid(Arknights_PID)
 }
 
 SetClick(wRatio,hRatio)
@@ -76,4 +47,52 @@ Resize(WinTitle,whRatio)
     WinGetClientPos &old_X, &old_Y, &old_Width, &old_Height, WinTitle
     WinMove ,,old_Height*whRatio,,WinTitle
 }
+
+class WinEventHook
+{
+    __New(eventMin, eventMax, hookProc, options := '', idProcess := 0, idThread := 0, dwFlags := 0) {
+        this.pCallback := CallbackCreate(hookProc, options, 7)
+        this.hHook := DllCall('SetWinEventHook', 'UInt', eventMin, 'UInt', eventMax, 'Ptr', 0, 'Ptr', this.pCallback
+                                               , 'UInt', idProcess, 'UInt', idThread, 'UInt', dwFlags, 'Ptr')
+    }
+    __Delete() {
+        DllCall('UnhookWinEvent', 'Ptr', this.hHook)
+        CallbackFree(this.pCallback)
+    }
+}
+
+creationHook := WinEventHook(EVENT_OBJECT_CREATE, EVENT_OBJECT_CREATE, CreationProc, "F")
+CreationProc(hWinEventHook, event, hwnd, idObject, idChild, dwEventThread, dwmsEventTime) {
+    if WinGetTitle(hwnd) = Arknights_Title
+    {      
+        sleep 1000
+        Init()
+    }
+}
+
+resizeHook:=WinEventHook(EVENT_SYSTEM_MOVESIZESTART, EVENT_SYSTEM_MOVESIZEEND, ResizeProc, "F",Arknights_PID)
+ResizeProc(hWinEventHook, event, hwnd, idObject, idChild, dwEventThread, dwmsEventTime) 
+{
+    winTitle:=WinGetTitle(hwnd)   
+    if(winTitle=Arknights_Title && event=EVENT_SYSTEM_MOVESIZEEND) 
+        Resize(winTitle,ratio1)
+}
+
+if WinExist(Arknights_Title) 
+    Init()
+
+^1::Run "C:\Users\35573\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\明日方舟.lnk"
+
+#HotIf WinActive(Arknights_Title)
+
+RBUTTON::SetClick(SkillBtn_wRatio1,SkillBtn_hRatio1)
+Space::SetClick(PauseBtn_wRatio1,PauseBtn_hRatio1)
+XButton2::SetClick(AbortBtn_wRatio1,AbortBtn_hRatio1)
+f::SetClick(AbortBtn_wRatio1,AbortBtn_hRatio1)
+^Space::Space
+
+^+NumpadAdd::sav.SetMasterVolume(min(sav.GetMasterVolume()+0.1,1))
+^+NumpadSub::sav.SetMasterVolume(max(sav.GetMasterVolume()-0.1,0))
+^+m::sav.SetMute(!sav.GetMute())
+
 #HotIf
