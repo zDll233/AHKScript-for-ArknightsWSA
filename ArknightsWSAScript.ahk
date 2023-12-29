@@ -1,11 +1,11 @@
-;for Arknights Hotkeys
+; for Arknights Hotkeys
 
 #Requires AutoHotkey v2.0
-;Audio Control
+; Audio Control
 #include "Audio.ahk"
 
 Persistent
-SetTitleMatchMode 3 ;match strictly
+SetTitleMatchMode 3 ; match strictly
 
 
 Arknights_PID:=0
@@ -14,6 +14,7 @@ Arknights_Title:="明日方舟"
 ;resolution,Proportion,etc
 ratio1:=1920/1040
 
+; measure with Window Spy
 SkillBtn_wRatio1:=0.65 
 SkillBtn_hRatio1:=0.56
 
@@ -23,7 +24,7 @@ PauseBtn_hRatio1:=0.1
 AbortBtn_wRatio1:=0.47
 AbortBtn_hRatio1:=0.34
 
-;event constant
+; event constants
 EVENT_SYSTEM_MOVESIZEEND := 0x000B
 EVENT_SYSTEM_MOVESIZESTART := 0x000A
 EVENT_OBJECT_CREATE := 0x8000
