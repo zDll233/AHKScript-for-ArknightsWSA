@@ -12,7 +12,7 @@ Arknights_PID:=0
 Arknights_Title:="明日方舟"
 
 ;resolution,Proportion,etc
-ratio1:=1920/1040
+ratio1:=1920/1080
 
 ; measure with Window Spy
 SkillBtn_wRatio1:=0.65 
