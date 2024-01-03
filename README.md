@@ -1,7 +1,7 @@
 # README
 
 
-自留AHK脚本，为WSA明日方舟提供热键和按键映射功能。
+AHK脚本，为WSA明日方舟提供热键和按键映射功能。
 
 
 音量控制部分，使用了[thqby](https://github.com/thqby)的[ahk2_lib](https://github.com/thqby/ahk2_lib)中的Audio库。
