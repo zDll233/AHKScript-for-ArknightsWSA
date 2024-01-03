@@ -6,7 +6,6 @@ AHK脚本，为WSA明日方舟提供热键和按键映射功能。
 
 音量控制部分，使用了[thqby](https://github.com/thqby)的[ahk2_lib](https://github.com/thqby/ahk2_lib)中的Audio库。
 
-
 默认比例1920*1080，使用时需要修改脚本预设的比例。
 
 ---
